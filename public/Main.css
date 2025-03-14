@@ -3,6 +3,8 @@ body {
     width: 100vw;
     margin: 0;
     display: flex;
+    background: hsl(0, 0%, 50%);
+    width: fit-content;
 }
 
 #mainPage {
@@ -27,6 +29,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition-duration: 0.5s;
+}
+
+#mainPage button:hover {
+    background-color: hsl(0,0%,65%)
 }
 
 #buttons {
@@ -35,11 +42,14 @@ body {
     flex-direction: row;
     justify-content: left;
     align-content: baseline;
+    margin: 10px;
+    background: hsl(0, 0%, 50%);
+    width: fit-content;
 }
 
 #buttons button {
     width: auto;
-    height: 15px;
+    height: 25px;
     border-radius: 5px;
     background-color: hsl(0, 0%, 60%);
     border-color: hsl(0, 0%, 70%);
@@ -48,4 +58,96 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 17px;
+    margin: 5px;
+    transition-duration: 0.5s;
+}
+
+#buttons button:hover {
+    background-color: hsl(0,0%,65%)
+}
+
+ul {
+    background: hsl(0, 0%, 50%);
+    width: fit-content;
+}
+
+li {
+    margin: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    color: White;
+    font-size: 17px;
+    justify-content:left;
+    align-items:baseline;
+}
+
+li button {
+    width: fit-content;
+    height: 30px;
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 60%);
+    border-color: hsl(0, 0%, 70%);
+    border-style: solid;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    margin: 10px;
+    transition-duration: 0.5s;
+}
+
+li button:hover {
+    background-color: hsl(0,0%,65%)
+}
+
+li p {
+    width: auto;
+    height: 30px;
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 60%);
+    border-color: hsl(0, 0%, 70%);
+    border-style: solid;
+    border-width: 1.75px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    margin: 5px;
+}
+
+input {
+    height: 50px;
+    width: 500px;
+    font-size: 20px;
+    margin: 10px 0px 0px 10px
+}
+
+button {
+    height: 53px;
+    width: 100px;
+    font-size: 20px;
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 60%);
+    border-color: hsl(0, 0%, 70%);
+    border-style: solid;
+    border-width: 1.75px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    font-size: 17px;
+    margin: 5px;
+    transition-duration: 0.5s;
+}
+
+button:hover {
+    background-color: hsl(0,0%,65%)
+}
+
+h2 {
+    margin: 15px;
+    font-size: 30px;
+    color: white;
 }
