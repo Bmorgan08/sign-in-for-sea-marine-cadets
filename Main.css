@@ -28,3 +28,24 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+#buttons {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: left;
+    align-content: baseline;
+}
+
+#buttons button {
+    width: auto;
+    height: 15px;
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 60%);
+    border-color: hsl(0, 0%, 70%);
+    border-style: solid;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
