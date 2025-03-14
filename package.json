@@ -24,6 +24,7 @@
     "path": "^0.12.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.3.0",
     "sign-in-for-sea-marine-cadets": "file:",
     "socket": "^0.14.61",
     "socket.io": "^4.8.1",

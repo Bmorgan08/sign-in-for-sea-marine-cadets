@@ -127,7 +127,7 @@ input {
 
 button {
     height: 53px;
-    width: 100px;
+    width: 200px;
     font-size: 20px;
     border-radius: 5px;
     background-color: hsl(0, 0%, 60%);
@@ -150,4 +150,19 @@ h2 {
     margin: 15px;
     font-size: 30px;
     color: white;
+}
+
+pre {
+    width: auto;
+    border-radius: 5px;
+    background-color: hsl(0, 0%, 60%);
+    border-color: hsl(0, 0%, 70%);
+    border-style: solid;
+    border-width: 1.75px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    margin: 5px;
 }

@@ -9,6 +9,7 @@ export default function App() {
     const [bluesProfiles, setBluesProfiles] = useState([]);
     const [greensProfiles, setGreensProfiles] = useState([]);
     const [guest, setGuest] = useState("");
+    const [signedInData, setSignedInData] = useState(""); // New state to hold signed-in data
 
     useEffect(() => {
         const handleProfiles = (type, setter) => (data) => {
@@ -22,11 +23,15 @@ export default function App() {
         socket.on("Staff", handleProfiles("Staff", setStaffProfiles));
         socket.on("Blues", handleProfiles("Blues", setBluesProfiles));
         socket.on("Greens", handleProfiles("Greens", setGreensProfiles));
+        socket.on("all-signed-in", (data) => {
+            setSignedInData(data); // Store the signed-in data from the server
+        });
 
         return () => {
             socket.off("Staff", handleProfiles("Staff", setStaffProfiles));
             socket.off("Blues", handleProfiles("Blues", setBluesProfiles));
             socket.off("Greens", handleProfiles("Greens", setGreensProfiles));
+            socket.off("all-signed-in", (data) => setSignedInData(data)); // Cleanup
         };
     }, []);
 
@@ -44,6 +49,10 @@ export default function App() {
             socket.emit("guest", guest);
             setGuest(""); // Clear the input after submitting
         }
+    };
+
+    const handleShowAllSignedIn = () => {
+        socket.emit("display-current-signed-in"); // Emit event to request signed-in data
     };
 
     const ProfileList = ({ type, profiles }) => (
@@ -83,6 +92,7 @@ export default function App() {
                     <button onClick={() => { setActivePage("guests"); }}>
                         Guests
                     </button>
+                    <button onClick={() => {handleShowAllSignedIn(); setActivePage("signed-in")}}>Show All Signed In</button>
                 </div>
             ) : (
                 <div>
@@ -92,17 +102,24 @@ export default function App() {
                     {activePage === "guests" && (
                         <>
                             <div id="buttons">
-                            <button onClick={() => setActivePage("main")}>Back to Main</button>
+                                <button onClick={() => setActivePage("main")}>Back to Main</button>
                             </div>
                             <h2>Enter Guest Name:</h2>
-                            <input 
-                                type="text" 
-                                value={guest} 
-                                onChange={(e) => setGuest(e.target.value)} 
-                                placeholder="Enter guest name" 
+                            <input
+                                type="text"
+                                value={guest}
+                                onChange={(e) => setGuest(e.target.value)}
+                                placeholder="Enter guest name"
                             />
                             <button onClick={handleGuest}>Submit</button>
                         </>
+                    )}
+                    {activePage === "signed-in" && signedInData && (
+                        <div>
+                            <h2>Signed-In Users:</h2>
+                            <pre>{signedInData}</pre>
+                            <button onClick={() => setActivePage("main")}>Back to Main</button>
+                        </div>
                     )}
                 </div>
             )}
