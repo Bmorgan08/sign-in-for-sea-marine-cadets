@@ -178,12 +178,12 @@ io.on("connection", (socket) => {
   socket.on("get-Greens", () => sendProfiles("Greens", socket));
 
   socket.on("new-staff", (name) => createProfile("Staff", name, socket));
-  socket.on("new-blue", (name) => createProfile("Blues", name, socket));
-  socket.on("new-green", (name) => createProfile("Greens", name, socket));
+  socket.on("new-blues", (name) => createProfile("Blues", name, socket));
+  socket.on("new-greens", (name) => createProfile("Greens", name, socket));
 
   socket.on("staff-sign-in", (name) => signIn("Staff", name, socket));
-  socket.on("blue-sign-in", (name) => signIn("Blues", name, socket));
-  socket.on("green-sign-in", (name) => signIn("Greens", name, socket));
+  socket.on("blues-sign-in", (name) => signIn("Blues", name, socket));
+  socket.on("greens-sign-in", (name) => signIn("Greens", name, socket));
 
   socket.on("display-current-signed-in", () => displayCurrentSignedIn(socket));
 
