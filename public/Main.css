@@ -1,0 +1,30 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    display: flex;
+}
+
+#mainPage {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Distribute equal width */
+    grid-template-rows: repeat(2, 1fr); /* Distribute equal height */
+    height: 100vh; /* Make sure the grid fills the viewport height */
+    width: 100vw; /* Make sure the grid fills the viewport width */
+    background: hsl(0, 0%, 80%);
+    gap: 20px; /* Optional, to create space between buttons */
+}
+
+#mainPage button {
+    width: 100%; /* Make the button take full width of the grid cell */
+    height: 100%; /* Make the button take full height of the grid cell */
+    border-radius: 15px;
+    background-color: hsl(0, 0%, 60%); /* Example background color */
+    border-color: hsl(0, 0%, 70%);
+    border-style: solid;
+    color: white; /* Button text color */
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
