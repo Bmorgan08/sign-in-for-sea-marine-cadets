@@ -91,6 +91,9 @@ export default function App() {
                     {activePage === "greens" && <ProfileList type="Greens" profiles={greensProfiles} />}
                     {activePage === "guests" && (
                         <>
+                            <div id="buttons">
+                            <button onClick={() => setActivePage("main")}>Back to Main</button>
+                            </div>
                             <h2>Enter Guest Name:</h2>
                             <input 
                                 type="text" 
