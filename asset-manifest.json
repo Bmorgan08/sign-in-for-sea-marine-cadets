@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/sign-in-for-sea-marine-cadets/static/js/main.204197c9.js",
+    "main.js": "/sign-in-for-sea-marine-cadets/static/js/main.2798b92c.js",
     "index.html": "/sign-in-for-sea-marine-cadets/index.html",
-    "main.204197c9.js.map": "/sign-in-for-sea-marine-cadets/static/js/main.204197c9.js.map"
+    "main.2798b92c.js.map": "/sign-in-for-sea-marine-cadets/static/js/main.2798b92c.js.map"
   },
   "entrypoints": [
-    "static/js/main.204197c9.js"
+    "static/js/main.2798b92c.js"
   ]
 }
