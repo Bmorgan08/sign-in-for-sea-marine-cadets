@@ -5,11 +5,22 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://bmorgan08.github.io',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
+app.options('*', cors());
+
+
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: { 
+    origin: "https://bmorgan08.github.io",
+    methods: ["GET", "POST"],
+    credentials: true
+  },
 });
 
 
@@ -22,7 +33,7 @@ async function ensureFolderExists(date) {
     await fs.copyFile("./Staff-Profiles.json", `./${date}/Staff-Profiles.json`);
     await fs.copyFile("./Blues-Profiles.json", `./${date}/Blues-Profiles.json`);
     await fs.copyFile("./Greens-Profiles.json", `./${date}/Greens-Profiles.json`);
-    await fs.copyFile("./Greens-Profiles.json", `./${date}/Juniors-Profiles.json`);
+    await fs.copyFile("./Juniors-Profiles.json", `./${date}/Juniors-Profiles.json`);
     await fs.writeFile(`./${date}/Guests.txt`, "");
   }
 }
@@ -204,4 +215,5 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3939, () => console.log("Server running on port 3939"));
+const PORT = process.env.PORT || 3939;
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

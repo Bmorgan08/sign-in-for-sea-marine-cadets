@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
-
-const socket = io("https://dnx817df-3939.uks1.devtunnels.ms/");
 
 export default function App() {
     const [activePage, setActivePage] = useState("main");
@@ -10,9 +8,19 @@ export default function App() {
     const [greensProfiles, setGreensProfiles] = useState([]);
     const [juniorsProfiles, setJuniorsProfiles] = useState([]);
     const [guest, setGuest] = useState("");
-    const [signedInData, setSignedInData] = useState(""); // New state to hold signed-in data
+    const [signedInData, setSignedInData] = useState("");
+
+    const socketRef = useRef(null);
 
     useEffect(() => {
+        // Initialize the socket connection
+        const socket = io('https://dnx817df-3939.uks1.devtunnels.ms/', {
+            withCredentials: true,
+            transports: ['websocket', 'polling']
+        });
+        socketRef.current = socket;
+        console.log("Connected to server");
+
         const handleProfiles = (type, setter) => (data) => {
             if (Array.isArray(data)) {
                 setter(data);
@@ -21,41 +29,37 @@ export default function App() {
             }
         };
 
+        // Set up listeners
         socket.on("Staff", handleProfiles("Staff", setStaffProfiles));
         socket.on("Blues", handleProfiles("Blues", setBluesProfiles));
         socket.on("Greens", handleProfiles("Greens", setGreensProfiles));
         socket.on("Juniors", handleProfiles("Juniors", setJuniorsProfiles));
-        socket.on("all-signed-in", (data) => {
-            setSignedInData(data); // Store the signed-in data from the server
-        });
+        socket.on("all-signed-in", (data) => setSignedInData(data));
 
+        // Clean up socket connection on component unmount
         return () => {
-            socket.off("Staff", handleProfiles("Staff", setStaffProfiles));
-            socket.off("Blues", handleProfiles("Blues", setBluesProfiles));
-            socket.off("Greens", handleProfiles("Greens", setGreensProfiles));
-            socket.off("Juniors", handleProfiles("Juniors", setJuniorsProfiles));
-            socket.off("all-signed-in", (data) => setSignedInData(data)); // Cleanup
+            socket.disconnect();
         };
     }, []);
 
     const handleSignIn = (type, profile) => {
-        socket.emit(`${type.toLowerCase()}-sign-in`, profile);
+        socketRef.current.emit(`${type.toLowerCase()}-sign-in`, profile);
     };
 
     const handleCreateProfile = (type) => {
         const name = prompt(`Enter ${type} name:`);
-        if (name) socket.emit(`new-${type.toLowerCase()}`, name);
+        if (name) socketRef.current.emit(`new-${type.toLowerCase()}`, name);
     };
 
     const handleGuest = () => {
         if (guest) {
-            socket.emit("guest", guest);
-            setGuest(""); // Clear the input after submitting
+            socketRef.current.emit("guest", guest);
+            setGuest("");
         }
     };
 
     const handleShowAllSignedIn = () => {
-        socket.emit("display-current-signed-in"); // Emit event to request signed-in data
+        socketRef.current.emit("display-current-signed-in");
     };
 
     const ProfileList = ({ type, profiles }) => (
@@ -83,24 +87,12 @@ export default function App() {
         <div>
             {activePage === "main" ? (
                 <div id="mainPage">
-                    <button onClick={() => { setActivePage("staff"); socket.emit("get-Staff"); }}>
-                        Staff
-                    </button>
-                    <button onClick={() => { setActivePage("blues"); socket.emit("get-Blues"); }}>
-                        Sea cadets
-                    </button>
-                    <button onClick={() => { setActivePage("greens"); socket.emit("get-Greens"); }}>
-                        Marine cadets
-                    </button>
-                    <button onClick={() => { setActivePage("juniors"); socket.emit("get-Juniors"); }}>
-                        Juniors
-                    </button>
-                    <button onClick={() => { setActivePage("guests"); }}>
-                        Guests
-                    </button>
-                    <button onClick={() => { handleShowAllSignedIn(); setActivePage("signed-in") }}>
-                        Show All Signed In
-                    </button>
+                    <button onClick={() => { setActivePage("staff"); socketRef.current.emit("get-Staff"); }}>Staff</button>
+                    <button onClick={() => { setActivePage("blues"); socketRef.current.emit("get-Blues"); }}>Sea cadets</button>
+                    <button onClick={() => { setActivePage("greens"); socketRef.current.emit("get-Greens"); }}>Marine cadets</button>
+                    <button onClick={() => { setActivePage("juniors"); socketRef.current.emit("get-Juniors"); }}>Juniors</button>
+                    <button onClick={() => { setActivePage("guests"); }}>Guests</button>
+                    <button onClick={() => { handleShowAllSignedIn(); setActivePage("signed-in"); }}>Show All Signed In</button>
                 </div>
             ) : (
                 <div>
