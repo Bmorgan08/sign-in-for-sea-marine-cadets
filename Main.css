@@ -10,7 +10,7 @@ body {
 #mainPage {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Distribute equal width */
-    grid-template-rows: repeat(2, 1fr); /* Distribute equal height */
+    grid-template-rows: repeat(3, 1fr); /* Distribute equal height */
     height: 100vh; /* Make sure the grid fills the viewport height */
     width: 100vw; /* Make sure the grid fills the viewport width */
     background: hsl(0, 0%, 80%);
