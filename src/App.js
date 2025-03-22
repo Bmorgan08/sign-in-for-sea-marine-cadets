@@ -8,6 +8,7 @@ export default function App() {
     const [staffProfiles, setStaffProfiles] = useState([]);
     const [bluesProfiles, setBluesProfiles] = useState([]);
     const [greensProfiles, setGreensProfiles] = useState([]);
+    const [juniorsProfiles, setJuniorsProfiles] = useState([]);
     const [guest, setGuest] = useState("");
     const [signedInData, setSignedInData] = useState(""); // New state to hold signed-in data
 
@@ -23,6 +24,7 @@ export default function App() {
         socket.on("Staff", handleProfiles("Staff", setStaffProfiles));
         socket.on("Blues", handleProfiles("Blues", setBluesProfiles));
         socket.on("Greens", handleProfiles("Greens", setGreensProfiles));
+        socket.on("Juniors", handleProfiles("Juniors", setJuniorsProfiles));
         socket.on("all-signed-in", (data) => {
             setSignedInData(data); // Store the signed-in data from the server
         });
@@ -31,6 +33,7 @@ export default function App() {
             socket.off("Staff", handleProfiles("Staff", setStaffProfiles));
             socket.off("Blues", handleProfiles("Blues", setBluesProfiles));
             socket.off("Greens", handleProfiles("Greens", setGreensProfiles));
+            socket.off("Juniors", handleProfiles("Juniors", setJuniorsProfiles));
             socket.off("all-signed-in", (data) => setSignedInData(data)); // Cleanup
         };
     }, []);
@@ -89,16 +92,22 @@ export default function App() {
                     <button onClick={() => { setActivePage("greens"); socket.emit("get-Greens"); }}>
                         Marine cadets
                     </button>
+                    <button onClick={() => { setActivePage("juniors"); socket.emit("get-Juniors"); }}>
+                        Juniors
+                    </button>
                     <button onClick={() => { setActivePage("guests"); }}>
                         Guests
                     </button>
-                    <button onClick={() => {handleShowAllSignedIn(); setActivePage("signed-in")}}>Show All Signed In</button>
+                    <button onClick={() => { handleShowAllSignedIn(); setActivePage("signed-in") }}>
+                        Show All Signed In
+                    </button>
                 </div>
             ) : (
                 <div>
                     {activePage === "staff" && <ProfileList type="Staff" profiles={staffProfiles} />}
                     {activePage === "blues" && <ProfileList type="Blues" profiles={bluesProfiles} />}
                     {activePage === "greens" && <ProfileList type="Greens" profiles={greensProfiles} />}
+                    {activePage === "juniors" && <ProfileList type="Juniors" profiles={juniorsProfiles} />}
                     {activePage === "guests" && (
                         <>
                             <div id="buttons">

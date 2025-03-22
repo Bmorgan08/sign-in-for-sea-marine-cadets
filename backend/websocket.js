@@ -22,6 +22,7 @@ async function ensureFolderExists(date) {
     await fs.copyFile("./Staff-Profiles.json", `./${date}/Staff-Profiles.json`);
     await fs.copyFile("./Blues-Profiles.json", `./${date}/Blues-Profiles.json`);
     await fs.copyFile("./Greens-Profiles.json", `./${date}/Greens-Profiles.json`);
+    await fs.copyFile("./Greens-Profiles.json", `./${date}/Juniors-Profiles.json`);
     await fs.writeFile(`./${date}/Guests.txt`, "");
   }
 }
@@ -128,18 +129,20 @@ async function displayCurrentSignedIn(socket) {
   const date = new Date().toISOString().split("T")[0]; // Get today's date
 
   try {
-    const [staffProfiles, bluesProfiles, greensProfiles, guests] = await Promise.all([
+    const [staffProfiles, bluesProfiles, greensProfiles, juniorsProfiles, guests] = await Promise.all([
       fs.readFile(`./${date}/Staff-Profiles.json`, "utf8"),
       fs.readFile(`./${date}/Blues-Profiles.json`, "utf8"),
       fs.readFile(`./${date}/Greens-Profiles.json`, "utf8"),
+      fs.readFile(`./${date}/Juniors-Profiles.json`, "utf8"),
       fs.readFile(`./${date}/Guests.txt`, "utf8")
     ]);
 
     const Staff = JSON.parse(staffProfiles);
     const Blues = JSON.parse(bluesProfiles);
     const Greens = JSON.parse(greensProfiles);
+    const Juniors = JSON.parse(juniorsProfiles);
 
-    let signedInStaff = "Staff:\n", signedInBlues = "Blues:\n", signedInGreens = "Marines:\n";
+    let signedInStaff = "Staff:\n", signedInBlues = "Blues:\n", signedInGreens = "Marines:\n" , signedInJuniors = "Juniors:\n";
 
     // Iterate over profiles to get signed-in individuals
     Staff.forEach(person => {
@@ -160,8 +163,14 @@ async function displayCurrentSignedIn(socket) {
       }
     });
 
+    Juniors.forEach(person => {
+      if (person.isSignedIn) {
+        signedInJuniors += `${person.name}\n`;
+      }
+    });
+
     let signedInGuests = `Guests:\n${guests}`;
-    let allSignedIn = `${signedInStaff}\n${signedInBlues}\n${signedInGreens}\n${signedInGuests}`;
+    let allSignedIn = `${signedInStaff}\n${signedInBlues}\n${signedInGreens}\n${signedInJuniors}\n${signedInGuests}`;
 
     socket.emit("all-signed-in", allSignedIn);
 
@@ -176,14 +185,17 @@ io.on("connection", (socket) => {
   socket.on("get-Staff", () => sendProfiles("Staff", socket));
   socket.on("get-Blues", () => sendProfiles("Blues", socket));
   socket.on("get-Greens", () => sendProfiles("Greens", socket));
+  socket.on("get-Juniors", () => sendProfiles("Juniors", socket));
 
   socket.on("new-staff", (name) => createProfile("Staff", name, socket));
   socket.on("new-blues", (name) => createProfile("Blues", name, socket));
   socket.on("new-greens", (name) => createProfile("Greens", name, socket));
+  socket.on("new-juniors", (name) => createProfile("Juniors", name, socket));
 
   socket.on("staff-sign-in", (name) => signIn("Staff", name, socket));
   socket.on("blues-sign-in", (name) => signIn("Blues", name, socket));
   socket.on("greens-sign-in", (name) => signIn("Greens", name, socket));
+  socket.on("juniors-sign-in", (name) => signIn("Juniors", name, socket));
 
   socket.on("display-current-signed-in", () => displayCurrentSignedIn(socket));
 
