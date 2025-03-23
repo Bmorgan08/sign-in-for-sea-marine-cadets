@@ -1,2 +1,6 @@
 [
+  {
+    "name": "Hello",
+    "isSignedIn": false
+  }
 ]

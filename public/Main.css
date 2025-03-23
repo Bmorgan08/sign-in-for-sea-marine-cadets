@@ -167,3 +167,11 @@ pre {
     margin: 5px;
     padding: 10px;
 }
+
+#nostyle {
+    width: auto;
+    border-radius: 0px;
+    background-color: hsl(0, 0%, 50%);
+    border-style: none;
+    color: white;
+}

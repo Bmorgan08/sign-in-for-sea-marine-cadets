@@ -9,6 +9,8 @@ export default function App() {
     const [juniorsProfiles, setJuniorsProfiles] = useState([]);
     const [guest, setGuest] = useState("");
     const [signedInData, setSignedInData] = useState("");
+    const [Logs, setLogs] = useState([]);
+    const [LogData, setLogData] = useState("");
 
     const socketRef = useRef(null);
 
@@ -35,6 +37,8 @@ export default function App() {
         socket.on("Greens", handleProfiles("Greens", setGreensProfiles));
         socket.on("Juniors", handleProfiles("Juniors", setJuniorsProfiles));
         socket.on("all-signed-in", (data) => setSignedInData(data));
+        socket.on("logs", (data) => setLogs(data));
+        socket.on("log", (data) => {setLogData(data); console.log(data)});
 
         // Clean up socket connection on component unmount
         return () => {
@@ -60,6 +64,14 @@ export default function App() {
 
     const handleShowAllSignedIn = () => {
         socketRef.current.emit("display-current-signed-in");
+    };
+
+    const Getlogs = () => {
+        socketRef.current.emit("get-logs");
+    };
+
+    const openLog = (log) => {
+        socketRef.current.emit("open-log", log);
     };
 
     const ProfileList = ({ type, profiles }) => (
@@ -120,6 +132,25 @@ export default function App() {
                             <h2>Signed-In Users:</h2>
                             <pre>{signedInData}</pre>
                             <button onClick={() => setActivePage("main")}>Back to Main</button>
+                            <button onClick={() => {setActivePage("Logs"); Getlogs()}}>Show logs</button>
+                        </div>
+                    )}
+                    {activePage === "Logs" && (
+                        <div>
+                            <h2>Logs:</h2>
+                            <pre id="nostyle">
+                            {Logs.map((log, index) => (
+                                <button key={index} onClick={() => {openLog(log); setActivePage("log")}}>{log}</button>
+                            ))}
+                            </pre>
+                            <button onClick={() => setActivePage("signed-in")}>Back to Signed-in</button>
+                        </div>
+                    )}
+                    {activePage === "log" && (
+                        <div>
+                            <h2>Log:</h2>
+                            <pre>{LogData}</pre>
+                            <button onClick={() => setActivePage("Logs")}>Back to Logs</button>
                         </div>
                     )}
                 </div>
